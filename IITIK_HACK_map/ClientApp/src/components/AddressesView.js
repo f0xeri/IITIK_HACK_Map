@@ -32,18 +32,34 @@ export const AddressesView = ({coords, setCoord, routeCoords, inputType, setInpu
   const setCoordsButtonOnClick = e => {
     e.preventDefault();
     routeCoords.current = [];
-    routeCoords.current = input.split(";");
+    routeCoords.current = input.split("\n");
     for (let i = 0; i < routeCoords.current.length; i++) {
-      routeCoords.current[i] = routeCoords.current[i].replaceAll(",", ".").split(" ");
+      routeCoords.current[i] = routeCoords.current[i].replaceAll(",", ".").split(";");
     }
     setCoord([]);
     for (let x in routeCoords.current) {
       setCoord(coords =>
         [...coords, {index: coords.length, address: "", coordinates: x}]);
     }
-    console.log(routeCoords.current);
   }
-
+  
+  const coordsFileUpload = e => {
+    let reader = new FileReader();
+    reader.readAsText(e.target.files[0]);
+    reader.onloadend = (e) => {
+      setInput(e.target.result);
+      routeCoords.current = [];
+      routeCoords.current = e.target.result.split("\n");
+      for (let i = 0; i < routeCoords.current.length; i++) {
+        routeCoords.current[i] = routeCoords.current[i].replaceAll(",", ".").split(";");
+      }
+      setCoord([]);
+    }
+    for (let x in routeCoords.current) {
+      setCoord(coords =>
+        [...coords, {index: coords.length, address: "", coordinates: x}]);
+    }
+  }
 
   /*function addNewAddress(e) {
     e.preventDefault();
@@ -59,10 +75,11 @@ export const AddressesView = ({coords, setCoord, routeCoords, inputType, setInpu
       {inputType === "search" && <input value={input} onChange={onInputChange} size={70} type="text" id="suggest"/>}
       {inputType === "coords" && 
         <div>
+          <h6> Загрузите координаты из файла</h6>
+          <input type="file" onChange={coordsFileUpload}/>
+          <h6> Или введите их</h6>
           <textarea value={input} onChange={onInputChange} style={{width: '532px'}} id="suggest"/>
           <button onClick={setCoordsButtonOnClick} type="submit" className="btn-primary">Построить</button>
-          <span> или </span>
-          <button type="submit" className="btn-primary">Загрузить из файла</button>
         </div>}
       <div>
         {coords.map(coord =>

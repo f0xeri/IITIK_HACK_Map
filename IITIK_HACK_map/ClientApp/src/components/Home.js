@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {YMaps, Map, Placemark} from 'react-yandex-maps';
 import {AddressesView} from "./AddressesView";
 import {Row, Col} from "reactstrap";
+import AntColonyOptimizationAlgorithm from "../AntColonyOptimizationAlgorithm.ts"
 
 export const Home = () => {
   const [coords, setCoord] = useState([]);
@@ -16,8 +17,6 @@ export const Home = () => {
     "Россия, Астраханская область, Приволжский район, а…орт Астрахань (Нариманово) имени Б.М. Кустодиева "];*/
   const routeCoordsRef = React.useRef(routeCoords);
   
-  
-
   // обновляем маршрут, если координаты изменились
   useEffect(() => {
     if (map.current != null) {
@@ -51,24 +50,32 @@ export const Home = () => {
       });
     }
   };
-
-  function buildRoute(ymaps) {
-    //map.current.geoObjects.removeAll();
-    console.log(routeCoordsRef.current);
-    /*const n = routeCoordsRef.current.length;
+  
+  async function buildDistanceMatrix(ymaps) {
+    const n = routeCoordsRef.current.length;
     // матрица n*n заполненная нулями
-    let distanceMatrix = Array(n).fill(Array(n).fill(0));
+    let distanceMatrix = [];
     
     for (let i = 0; i < n; i++) {
-      for (let j = i + 1; j < n; j++) {
+      let newArr = [];
+      for (let j = 0; j < n; j++) {
         // получаем расстояние между coord[i] и coord[j]
-        ymaps.route([routeCoordsRef.current[i], routeCoordsRef.current[j]]).then((route) => {
-          distanceMatrix[i][j] = route.getLength();
-          console.log(i, j, routeCoordsRef.current[i], routeCoordsRef.current[j], route.getLength());
-        })
+        await ymaps.route([routeCoordsRef.current[i], routeCoordsRef.current[j]]).then((route) => {
+          newArr.push(route.getLength())
+          //console.log(i, j, routeCoordsRef.current[i], routeCoordsRef.current[j], route.getLength());
+        });
       }
+      distanceMatrix.push(newArr);
     }
-    console.table(distanceMatrix);*/
+    return distanceMatrix;
+  }
+
+  async function buildRoute(ymaps) {
+    const n = routeCoordsRef.current.length;
+    //map.current.geoObjects.removeAll();
+    let distanceMatrix = await buildDistanceMatrix(ymaps);
+    let res = AntColonyOptimizationAlgorithm(distanceMatrix, n, 0);
+    console.log(res);
     map.current.geoObjects.removeAll();
     ymaps.route(routeCoordsRef.current, {
       mapStateAutoApply: true, reverseGeocoding: inputType === "coords"
@@ -111,7 +118,6 @@ export const Home = () => {
                    instanceRef={map}
                    onLoad={ymapsInstance => {
                      loadSuggest(ymapsInstance);
-                     buildRoute(ymapsInstance);
                      ymaps.current = ymapsInstance;
                    }}
                    modules={["SuggestView", "geocode", "route"]}

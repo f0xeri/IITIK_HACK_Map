@@ -142,6 +142,7 @@
           <e p="README.md" t="Include" />
           <e p="src" t="Include">
             <e p=".env" t="Include" />
+            <e p="AntColonyOptimizationAlgorithm.ts" t="Include" />
             <e p="App.js" t="Include" />
             <e p="App.test.js" t="Include" />
             <e p="components" t="Include">
@@ -154,6 +155,7 @@
             </e>
             <e p="custom.css" t="Include" />
             <e p="index.js" t="Include" />
+            <e p="react-app-env.d.ts" t="Include" />
             <e p="registerServiceWorker.js" t="Include" />
           </e>
         </e>
