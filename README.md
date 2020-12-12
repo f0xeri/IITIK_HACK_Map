@@ -44,3 +44,6 @@
 ## Разработчики
  - [f0xeri](https://github.com/f0xeri)  - весь фронтенд и переписанные на Typescript алгоритмы
  - [Rellik-git](https://github.com/Rellik-git) - алгоритмы, реализованные на C++
+ 
+## Live demo
+Посмотреть и попробовать, что у нас получилось можно [тут](https://iitik-hack-map.herokuapp.com/)
