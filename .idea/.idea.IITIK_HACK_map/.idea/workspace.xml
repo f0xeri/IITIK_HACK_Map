@@ -22,13 +22,19 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a6410a08-db37-4c11-ac05-b872bb881119" name="Default Changelist" comment="Построение маршрута по координатам">
-      <change afterPath="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/src/AntColonyOptimizationAlgorithm.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.IITIK_HACK_map/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.IITIK_HACK_map/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.IITIK_HACK_map/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.IITIK_HACK_map/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/.env" beforeDir="false" afterPath="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/src/components/AddressesView.js" beforeDir="false" afterPath="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/src/components/AddressesView.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/src/components/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/src/components/Home.js" afterDir="false" />
+    <list default="true" id="a6410a08-db37-4c11-ac05-b872bb881119" name="Default Changelist" comment="Мелкие правки и комментарии">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.IITIK_HACK_map/.idea/contentModel.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.IITIK_HACK_map/.idea/discord.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.IITIK_HACK_map/.idea/indexLayout.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.IITIK_HACK_map/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.IITIK_HACK_map/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.IITIK_HACK_map/.idea/projectSettingsUpdater.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.IITIK_HACK_map/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.IITIK_HACK_map/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.IITIK_HACK_map/riderModule.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IITIK_HACK_map/.idea/.idea.IITIK_HACK_map/.idea/contentModel.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/.env" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +45,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -64,10 +71,13 @@
         <option value="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/src/components/AddressesView.css" />
         <option value="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/src/AntColonyOptimizationAlgoAlgorithm.js" />
         <option value="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/src/AntColonyOptimizationAlgoAlgorithm.ts" />
-        <option value="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/src/components/AddressesView.js" />
         <option value="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/.env" />
         <option value="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/src/AntColonyOptimizationAlgorithm.ts" />
+        <option value="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/src/components/AddressesView.js" />
+        <option value="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/src/index.js" />
+        <option value="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/src/NeuralAlgorithm.ts" />
         <option value="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/src/components/Home.js" />
+        <option value="$PROJECT_DIR$/IITIK_HACK_map/ClientApp/.gitignore" />
       </list>
     </option>
   </component>
@@ -133,7 +143,7 @@
       <workItem from="1607600198874" duration="2838000" />
       <workItem from="1607624224035" duration="12010000" />
       <workItem from="1607689124646" duration="12483000" />
-      <workItem from="1607703906705" duration="21890000" />
+      <workItem from="1607703906705" duration="55497000" />
     </task>
     <task id="LOCAL-00001" summary="работает карта, бэкенд пустой">
       <created>1607591109203</created>
@@ -170,7 +180,63 @@
       <option name="project" value="LOCAL" />
       <updated>1607703647572</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="не работающий муравьиный алгоритм">
+      <created>1607727141056</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1607727141056</updated>
+    </task>
+    <task id="LOCAL-00007" summary="некоторые фиксы, но алгоритм всё ещё странно себя ведёт&#10;запросы также очень долго идут из-за await в цикле">
+      <created>1607745581163</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1607745581163</updated>
+    </task>
+    <task id="LOCAL-00008" summary="добавил комментарии в коде">
+      <created>1607745916607</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1607745916607</updated>
+    </task>
+    <task id="LOCAL-00009" summary="фиксы багов">
+      <created>1607748630872</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1607748630872</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Реализация нейронного алгоритма">
+      <created>1607776100613</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1607776100613</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Дополнения интерфейса, вывод двух маршрутов">
+      <created>1607777782927</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1607777782928</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Фикс цветов маршрутов">
+      <created>1607783384269</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1607783384269</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Мелкие правки и комментарии">
+      <created>1607785298182</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1607785298182</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -200,7 +266,15 @@
     <MESSAGE value="Обновление дизайна и некоторые мелочи" />
     <MESSAGE value="фикс апдейта страницы при нажатии enter в поле для ввода" />
     <MESSAGE value="Построение маршрута по координатам" />
-    <option name="LAST_COMMIT_MESSAGE" value="Построение маршрута по координатам" />
+    <MESSAGE value="не работающий муравьиный алгоритм" />
+    <MESSAGE value="некоторые фиксы, но алгоритм всё ещё странно себя ведёт&#10;запросы также очень долго идут из-за await в цикле" />
+    <MESSAGE value="добавил комментарии в коде" />
+    <MESSAGE value="фиксы багов" />
+    <MESSAGE value="Реализация нейронного алгоритма" />
+    <MESSAGE value="Дополнения интерфейса, вывод двух маршрутов" />
+    <MESSAGE value="Фикс цветов маршрутов" />
+    <MESSAGE value="Мелкие правки и комментарии" />
+    <option name="LAST_COMMIT_MESSAGE" value="Мелкие правки и комментарии" />
   </component>
   <component name="WindowStateProjectService">
     <state x="1023" y="409" key="#JavaScript" timestamp="1607455866200">
@@ -211,22 +285,22 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1054" y="502" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1400@0.0.2560.1400" timestamp="1607707430560" />
-    <state width="2517" height="288" key="GridCell.Tab.0.bottom" timestamp="1607713808038">
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom" timestamp="1607727093833">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2517" height="288" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1607713808038" />
-    <state width="2517" height="288" key="GridCell.Tab.0.center" timestamp="1607713808038">
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1607727093833" />
+    <state width="2517" height="288" key="GridCell.Tab.0.center" timestamp="1607727093833">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2517" height="288" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1607713808038" />
-    <state width="2517" height="288" key="GridCell.Tab.0.left" timestamp="1607713808038">
+    <state width="2517" height="288" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1607727093833" />
+    <state width="2517" height="288" key="GridCell.Tab.0.left" timestamp="1607727093833">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2517" height="288" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1607713808038" />
-    <state width="2517" height="288" key="GridCell.Tab.0.right" timestamp="1607713808038">
+    <state width="2517" height="288" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1607727093833" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right" timestamp="1607727093833">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2517" height="288" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1607713808038" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1607727093833" />
     <state width="2517" height="190" key="GridCell.Tab.1.bottom" timestamp="1607713361266">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
@@ -299,14 +373,14 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="781" y="345" key="SettingsEditor/0.0.2560.1400@0.0.2560.1400" timestamp="1607703951737" />
-    <state x="872" y="433" key="Vcs.Push.Dialog.v2" timestamp="1607703654667">
+    <state x="872" y="433" key="Vcs.Push.Dialog.v2" timestamp="1607777787676">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="872" y="433" key="Vcs.Push.Dialog.v2/0.0.2560.1400@0.0.2560.1400" timestamp="1607703654667" />
-    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1607489579381">
+    <state x="872" y="433" key="Vcs.Push.Dialog.v2/0.0.2560.1400@0.0.2560.1400" timestamp="1607777787676" />
+    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1607740806906">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1607489579381" />
+    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1607740806906" />
     <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.SelectionHistoryDialog" timestamp="1607712869778">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
