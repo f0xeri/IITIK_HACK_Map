@@ -69,7 +69,7 @@ export const AddressesView = ({coords, setCoord, routeCoords, inputType, setInpu
   // <button onClick={addNewAddress} type="submit" className="btn-primary">Добавить адрес</button>
   return (
     <div>
-      <div onChange={event => {setInputType(event.target.value)}}>
+      <div onChange={event => {setInputType(event.target.value); setCoord([]); routeCoords.current = []; setInput("")}}>
         <div><input type="radio" value="search" defaultChecked  name="inputType"/> Поиск по адресу </div>
         <div><input type="radio" value="coords" name="inputType"/> Ввод координат </div>
       </div>
@@ -79,7 +79,7 @@ export const AddressesView = ({coords, setCoord, routeCoords, inputType, setInpu
           <h6> Загрузите координаты из файла</h6>
           <input type="file" onChange={coordsFileUpload}/>
           <h6> Или введите их</h6>
-          <textarea value={input} onChange={onInputChange} style={{width: '532px'}} id="suggest"/>
+          <textarea value={input} onChange={onInputChange} style={{width: '532px'}}/>
           <button onClick={setCoordsButtonOnClick} type="submit" className="btn-primary">Построить</button>
         </div>}
       <div>

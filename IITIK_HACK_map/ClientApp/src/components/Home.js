@@ -24,8 +24,15 @@ export const Home = () => {
     if (map.current != null) {
       buildRoute(ymaps.current);
       //loadSuggest(ymaps.current);
+      console.log(coords)
     }
   }, [coords])
+
+  useEffect(() => {
+    if (map.current != null && inputType === "search") {
+      loadSuggest(ymaps.current);
+    }
+  }, [inputType])
 
   /* подсказки пока что ТОЛЬКО по адресу, 
    * с yandex#search не получается получить координаты геокодером
@@ -48,14 +55,13 @@ export const Home = () => {
         // вместо геокодера
         setCoord(coords =>
           [...coords, {index: coords.length, address: e.get("item").value, coordinates: ""}]);
-        routeCoords.push(e.get("item").value);
+        routeCoordsRef.current.push(e.get("item").value);
       });
     }
   };
 
   let i = 0;
   let j = 0;
-
 
   // неудачная попытка сделать рекурсию, временно оставил (вдруг заработает)
   async function getDistance(ymaps, distanceMatrix, i, j, n) {
@@ -92,58 +98,61 @@ export const Home = () => {
   }
 
   async function buildRoute(ymaps) {
+    map.current.geoObjects.removeAll();
+    let newRouteCoords = routeCoordsRef.current;
     const n = routeCoordsRef.current.length;
     //map.current.geoObjects.removeAll();
 
     let distanceMatrix = await buildDistanceMatrix(ymaps);
-    
-    // доделываем матрицу (симметрия)
-    console.log(distanceMatrix);
-    for (let i = n - 1; i >= 0; i--) {
-      for (let j = i; j >= 0; j--) {
-        if (i !== j) {
-          distanceMatrix[i][j] = distanceMatrix[j][i];
+    if (routeCoordsRef.current.length > 1) {
+      // доделываем матрицу (симметрия)
+      console.log(distanceMatrix);
+      for (let i = n - 1; i >= 0; i--) {
+        for (let j = i; j >= 0; j--) {
+          if (i !== j) {
+            distanceMatrix[i][j] = distanceMatrix[j][i];
+          }
         }
       }
-    }
-    console.log(distanceMatrix);
-    // запускаем алгоритм
-    let res = AntColonyOptimizationAlgorithm(distanceMatrix, routeCoordsRef.current.length, 0);
-    console.log(res);
+      console.log(distanceMatrix);
+      // запускаем алгоритм
+      let res = AntColonyOptimizationAlgorithm(distanceMatrix, routeCoordsRef.current.length, 0);
+      console.log(res);
 
-    // делаем новую матрицу расстояний для повторного прохода алгоритма
-    let newDistanceMatrix = [];
-    for (let i = 0; i < n; i++) {
-      let newArr = [];
-      for (let j = 0; j < n; j++) {
-        newArr.push(distanceMatrix[res.tabu[i]][res.tabu[j]]);
+      /*// делаем новую матрицу расстояний для повторного прохода алгоритма
+      let newDistanceMatrix = [];
+      for (let i = 0; i < n; i++) {
+        let newArr = [];
+        for (let j = 0; j < n; j++) {
+          newArr.push(distanceMatrix[res.tabu[i]][res.tabu[j]]);
+        }
+        newDistanceMatrix.push(newArr);
       }
-      newDistanceMatrix.push(newArr);
-    }
-    console.log(newDistanceMatrix);
-    // повторный проход
-    res = AntColonyOptimizationAlgorithm(newDistanceMatrix, n, 0);
-    console.log(res);
+      console.log(newDistanceMatrix);
+      // повторный проход
+      res = AntColonyOptimizationAlgorithm(newDistanceMatrix, n, 0);
+      console.log(res);*/
 
-    // обновляем массив координат с изменённым порядком
-    let newRouteCoords = [];
-    for (let i = 0; i < n; i++) {
-      newRouteCoords.push(routeCoordsRef.current[res.tabu[i]]);
-    }
-    console.log(newRouteCoords);
-    // рисуем маршрут
-    map.current.geoObjects.removeAll();
-    ymaps.route(routeCoordsRef.current, {
-      mapStateAutoApply: true, reverseGeocoding: inputType === "coords"
-    }).then(function (route) {
-      route.getPaths().options.set({
-        strokeColor: '0000ffff',
-        opacity: 0.9
+      // обновляем массив координат с изменённым порядком
+      let newRouteCoords = [];
+      for (let i = 0; i < n; i++) {
+        newRouteCoords.push(routeCoordsRef.current[res.tabu[i]]);
+      }
+      console.log(newRouteCoords);
+
+      // рисуем маршрут
+      ymaps.route(newRouteCoords, {
+        mapStateAutoApply: true, reverseGeocoding: inputType === "coords"
+      }).then(function (route) {
+        route.getPaths().options.set({
+          strokeColor: '0000ffff',
+          opacity: 0.9
+        });
+        // добавляем маршрут на карту
+        map.current.geoObjects.add(route);
+        console.log(route.getLength());
       });
-      // добавляем маршрут на карту
-      map.current.geoObjects.add(route);
-      console.log(route.getLength());
-    });
+    }
   }
 
   const style = {
