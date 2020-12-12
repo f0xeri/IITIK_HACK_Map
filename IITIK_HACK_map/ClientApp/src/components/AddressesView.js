@@ -37,13 +37,14 @@ export const AddressesView = ({coords, setCoord, routeCoords, inputType, setInpu
       routeCoords.current[i] = routeCoords.current[i].replaceAll(",", ".").split(";");
     }
     setCoord([]);
-    for (let x in routeCoords.current) {
+    for (let i = 0; i < routeCoords.current; i++) {
       setCoord(coords =>
-        [...coords, {index: coords.length, address: "", coordinates: x}]);
+        [...coords, {index: coords.length, address: "", coordinates: routeCoords.current[i]}]);
     }
   }
   
   const coordsFileUpload = e => {
+    setInput("");
     let reader = new FileReader();
     reader.readAsText(e.target.files[0]);
     reader.onloadend = (e) => {
@@ -84,7 +85,7 @@ export const AddressesView = ({coords, setCoord, routeCoords, inputType, setInpu
       <div>
         {coords.map(coord =>
           <div>
-            <input value={coord.address} onChange={(e) => onCoordChange(e, coord)} size={70} type="text"/>
+            {inputType === "search" && <input value={coord.address} onChange={(e) => onCoordChange(e, coord)} size={70} type="text"/>}
             <span><button className="btn-danger" onClick={() => deleteCoord(coord)}>Удалить</button></span>
           </div>
         )}

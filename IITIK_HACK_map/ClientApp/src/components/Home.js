@@ -3,6 +3,7 @@ import {YMaps, Map, Placemark} from 'react-yandex-maps';
 import {AddressesView} from "./AddressesView";
 import {Row, Col} from "reactstrap";
 import AntColonyOptimizationAlgorithm from "../AntColonyOptimizationAlgorithm.ts"
+import * as Promice from "q";
 
 export const Home = () => {
   const [coords, setCoord] = useState([]);
@@ -11,12 +12,13 @@ export const Home = () => {
   const map = React.useRef(null);
   const ymaps = React.useRef(null);
 
+
   let routeCoords = []; /*["Россия, Астрахань, Моздокская улица, 54 ", 
     "Россия, Астрахань, Боевая улица, 62 ", 
     "Россия, Астрахань, улица Татищева, 16 ", 
     "Россия, Астраханская область, Приволжский район, а…орт Астрахань (Нариманово) имени Б.М. Кустодиева "];*/
   const routeCoordsRef = React.useRef(routeCoords);
-  
+
   // обновляем маршрут, если координаты изменились
   useEffect(() => {
     if (map.current != null) {
@@ -50,32 +52,79 @@ export const Home = () => {
       });
     }
   };
-  
+
+  let i = 0;
+  let j = 0;
+
+
+  async function getDistance(ymaps, distanceMatrix, i, j, n) {
+    await ymaps.route([routeCoordsRef.current[i], routeCoordsRef.current[j]]).then((route) => {
+      distanceMatrix[i][j] = route.getLength();
+      console.log(i, j, routeCoordsRef.current[i], routeCoordsRef.current[j], route.getLength());
+    });
+    if (j < n) {
+      j++;
+      getDistance(ymaps, distanceMatrix, i, j, n);
+    } else if (i < n) {
+      i++;
+      getDistance(ymaps, distanceMatrix, i, j, n);
+    }
+  }
+
   async function buildDistanceMatrix(ymaps) {
     const n = routeCoordsRef.current.length;
-    // матрица n*n заполненная нулями
-    let distanceMatrix = [];
-    
+    let distanceMatrix = Array(n).fill(Array(n).fill(0));
+    console.log(routeCoordsRef.current);
+
     for (let i = 0; i < n; i++) {
-      let newArr = [];
-      for (let j = 0; j < n; j++) {
-        // получаем расстояние между coord[i] и coord[j]
+      let newArr = Array(n).fill(0);
+      for (let j = i + 1; j < n; j++) {
         await ymaps.route([routeCoordsRef.current[i], routeCoordsRef.current[j]]).then((route) => {
-          newArr.push(route.getLength())
-          //console.log(i, j, routeCoordsRef.current[i], routeCoordsRef.current[j], route.getLength());
+          newArr[j] = route.getLength();
+          //newArr.push(route.getLength())
+          console.log(i, j, routeCoordsRef.current[i], routeCoordsRef.current[j], route.getLength());
         });
       }
-      distanceMatrix.push(newArr);
+      distanceMatrix[i] = newArr;
     }
+
     return distanceMatrix;
   }
 
   async function buildRoute(ymaps) {
     const n = routeCoordsRef.current.length;
     //map.current.geoObjects.removeAll();
+
     let distanceMatrix = await buildDistanceMatrix(ymaps);
-    let res = AntColonyOptimizationAlgorithm(distanceMatrix, n, 0);
+    console.log(distanceMatrix);
+    for (let i = n - 1; i >= 0; i--) {
+      for (let j = i; j >= 0; j--) {
+        if (i !== j) {
+          distanceMatrix[i][j] = distanceMatrix[j][i];
+        }
+      }
+    }
+    console.log(distanceMatrix);
+    let res = AntColonyOptimizationAlgorithm(distanceMatrix, routeCoordsRef.current.length, 0);
     console.log(res);
+
+    let newDistanceMatrix = [];
+    for (let i = 0; i < n; i++) {
+      let newArr = [];
+      for (let j = 0; j < n; j++) {
+        newArr.push(distanceMatrix[res.tabu[i]][res.tabu[j]]);
+      }
+      newDistanceMatrix.push(newArr);
+    }
+    console.log(newDistanceMatrix);
+    res = AntColonyOptimizationAlgorithm(newDistanceMatrix, n, 0);
+    console.log(res);
+
+    let newRouteCoords = [];
+    for (let i = 0; i < n; i++) {
+      newRouteCoords.push(routeCoordsRef.current[res.tabu[i]]);
+    }
+    console.log(newRouteCoords);
     map.current.geoObjects.removeAll();
     ymaps.route(routeCoordsRef.current, {
       mapStateAutoApply: true, reverseGeocoding: inputType === "coords"
@@ -102,7 +151,8 @@ export const Home = () => {
 
         <Col xl="3">
           <h1>Точки</h1>
-          <AddressesView coords={coords} setCoord={setCoord} routeCoords={routeCoordsRef} inputType={inputType} setInputType={setInputType}/>
+          <AddressesView coords={coords} setCoord={setCoord} routeCoords={routeCoordsRef} inputType={inputType}
+                         setInputType={setInputType}/>
         </Col>
 
         <Col>

@@ -17,7 +17,7 @@ class WAY_TYPE {
 
 function probability(to: number, ant: WAY_TYPE, pheromone: Array<Array<number>>, distance: Array<Array<number>>, nVertexes: number) {
     // если вершина уже посещена, возвращаем 0
-    for (let i: number = 0; i < ant.itabu; ++i) if (to == ant.itabu[i]) return 0;
+    for (let i: number = 0; i < ant.itabu; ++i) if (to == ant.tabu[i]) return 0;
     
     let sum: number = 0.0;
     let from: number = ant.tabu[ant.itabu - 1];
@@ -25,7 +25,7 @@ function probability(to: number, ant: WAY_TYPE, pheromone: Array<Array<number>>,
     for (let j = 0; j < nVertexes; ++j) {
         let flag: number = 1;
         // проверяем, посещал ли муравей j вершину
-        for (let i = 0; i < ant.itabu; ++i) if (j == ant.itabu[i]) flag = 0;
+        for (let i = 0; i < ant.itabu; ++i) if (j == ant.tabu[i]) flag = 0;
         //console.log(distance);
         //console.log(pheromone);
         if (flag) sum += Math.pow(pheromone[from][j], ALPHA) * Math.pow(distance[from][j], BETTA);
@@ -35,7 +35,6 @@ function probability(to: number, ant: WAY_TYPE, pheromone: Array<Array<number>>,
 
 function AntColonyOptimizationAlgorithm(distanceMatrix: number[][], nVertexes: number, start: number) : WAY_TYPE {
     let way: WAY_TYPE = new WAY_TYPE();
-    console.log(distanceMatrix)
     way.itabu = 0;
     way.length = -1;
     way.tabu = Array(nVertexes).fill(0);
@@ -110,7 +109,6 @@ function AntColonyOptimizationAlgorithm(distanceMatrix: number[][], nVertexes: n
             pheromone[from][to] += (Q * 3.0) / way.length;
             pheromone[to][from] = pheromone[from][to];
         }
-        console.log(ants[t]);
     }
     // возвращаем кратчайший маршрут
     return way;
