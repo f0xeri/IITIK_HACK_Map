@@ -9,6 +9,9 @@ export const Home = () => {
   const [coords, setCoord] = useState([]);
   const [inputType, setInputType] = useState('search');
 
+  const [way1, setWay1] = useState({points: [], pointCoords: [], length: 0});
+  const [way2, setWay2] = useState({points: [], pointCoords: [], length: 0});
+  
   const map = React.useRef(null);
   const ymaps = React.useRef(null);
 
@@ -96,6 +99,21 @@ export const Home = () => {
 
     return distanceMatrix;
   }
+  
+  function drawRoute(ymaps, coords, setWay, way, color) {
+    ymaps.route(coords, {
+      mapStateAutoApply: true, reverseGeocoding: inputType === "coords"
+    }).then(function (route) {
+      route.getPaths().options.set({
+        strokeColor: color,
+        opacity: 0.9
+      });
+      // добавляем маршрут на карту
+      map.current.geoObjects.add(route);
+      console.log(route.getLength());
+      setWay({length: route.getLength(), points: way.points, pointCoords: way.pointCoords});
+    });
+  }
 
   async function buildRoute(ymaps) {
     map.current.geoObjects.removeAll();
@@ -118,31 +136,7 @@ export const Home = () => {
       
       let res = startNeuralAlgorithm(distanceMatrix, n);
       console.log(res);
-      // запускаем алгоритм
-      //let res = AntColonyOptimizationAlgorithm(distanceMatrix, routeCoordsRef.current.length, 0);
-      //console.log(res);
-
-      /*// делаем новую матрицу расстояний для повторного прохода алгоритма
-      let newDistanceMatrix = [];
-      for (let i = 0; i < n; i++) {
-        let newArr = [];
-        for (let j = 0; j < n; j++) {
-          newArr.push(distanceMatrix[res.tabu[i]][res.tabu[j]]);
-        }
-        newDistanceMatrix.push(newArr);
-      }
-      console.log(newDistanceMatrix);
-      // повторный проход
-      res = AntColonyOptimizationAlgorithm(newDistanceMatrix, n, 0);
-      console.log(res);*/
-
-      // обновляем массив координат с изменённым порядком (ant colony optimization)
-      /*let newRouteCoords = [];
-      for (let i = 0; i < n; i++) {
-        newRouteCoords.push(routeCoordsRef.current[res.tabu[i]]);
-      }
-      console.log(newRouteCoords);*/
-
+      
       // обновляем массив координат с изменённым порядком (neural)
       let newRouteCoords = [];
       let way1RouteCoords = [];
@@ -158,31 +152,24 @@ export const Home = () => {
       }
       console.log(newRouteCoords);
       
-      // рисуем маршрут 1
-      ymaps.route(way1RouteCoords, {
-        mapStateAutoApply: true, reverseGeocoding: inputType === "coords"
-      }).then(function (route) {
-        route.getPaths().options.set({
-          strokeColor: '0000ffff',
-          opacity: 0.9
+      if (inputType === "coords") {
+        drawRoute(ymaps, way1RouteCoords, setWay1, {pointCoords: way1RouteCoords, points: res.way1.one_chromosome}, 'ffff0000');
+        drawRoute(ymaps, way2RouteCoords, setWay2, {pointCoords: way2RouteCoords, points: res.way2.one_chromosome}, 'ff000000');
+      }
+      else {
+        // рисуем маршрут
+        ymaps.route(newRouteCoords, {
+          mapStateAutoApply: true, reverseGeocoding: inputType === "coords"
+        }).then(function (route) {
+          route.getPaths().options.set({
+            strokeColor: '0000ffff',
+            opacity: 0.9
+          });
+          // добавляем маршрут на карту
+          map.current.geoObjects.add(route);
+          console.log(route.getLength());
         });
-        // добавляем маршрут на карту
-        map.current.geoObjects.add(route);
-        console.log(route.getLength());
-      });
-
-      // рисуем маршрут 2
-      ymaps.route(way2RouteCoords, {
-        mapStateAutoApply: true, reverseGeocoding: inputType === "coords"
-      }).then(function (route) {
-        route.getPaths().options.set({
-          strokeColor: 'ff0000',
-          opacity: 0.9
-        });
-        // добавляем маршрут на карту
-        map.current.geoObjects.add(route);
-        console.log(route.getLength());
-      });
+      }
     }
   }
 
@@ -200,6 +187,9 @@ export const Home = () => {
           <h1>Точки</h1>
           <AddressesView coords={coords} setCoord={setCoord} routeCoords={routeCoordsRef} inputType={inputType}
                          setInputType={setInputType}/>
+          <div style={{color: "blue"}}>Длина маршрута первого контролёра - {Math.round(way1.length / 1000)} км<br/>Его путевые точки - {way1.points.map((x) => <span>{x} </span>)}</div>
+          <br/>
+          <div style={{color: "red"}}>Длина маршрута второго контролёра - {Math.round(way2.length / 1000)} км<br/>Его путевые точки - {way2.points.map((x) => <span>{x} </span>)}</div>
         </Col>
 
         <Col>
