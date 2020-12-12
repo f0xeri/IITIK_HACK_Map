@@ -8,20 +8,7 @@ export const AddressesView = ({coords, setCoord, routeCoords, inputType, setInpu
 
   function onInputChange(e) {
     e.preventDefault();
-    //setInput(e.target.value.replace(/\s+/g,' '));
     setInput(e.target.value);
-  }
-  
-  // временно убрал редактирование готовых точек
-  const onCoordChange = (e, coord)  => {
-    /*coord.address = e.target.value.replace(/\s+/g,' ');
-    let coordsTemp = [...coords];
-    let routeCoordsTemp = [...routeCoords.current];
-    coordsTemp[coord.index] = coord;
-
-    routeCoords.current[coord.index] = e.target.value.replace(/\s+/g,' ');
-    console.log(routeCoords);
-    setCoord(coordsTemp);*/
   }
   
   const deleteCoord = coord => {
@@ -43,6 +30,7 @@ export const AddressesView = ({coords, setCoord, routeCoords, inputType, setInpu
     }
   }
   
+  // загружаем и парсим файл и сохраняем его содержимое куда надо
   const coordsFileUpload = e => {
     setInput("");
     let reader = new FileReader();
@@ -61,12 +49,7 @@ export const AddressesView = ({coords, setCoord, routeCoords, inputType, setInpu
         [...coords, {index: coords.length, address: "", coordinates: x}]);
     }
   }
-
-  /*function addNewAddress(e) {
-    e.preventDefault();
-    setAddresses([...addresses, input]);
-  }*/
-  // <button onClick={addNewAddress} type="submit" className="btn-primary">Добавить адрес</button>
+  
   return (
     <div>
       <div onChange={event => {setInputType(event.target.value); setCoord([]); routeCoords.current = []; setInput("")}}>
@@ -81,11 +64,12 @@ export const AddressesView = ({coords, setCoord, routeCoords, inputType, setInpu
           <h6> Или введите их</h6>
           <textarea value={input} onChange={onInputChange} style={{width: '532px'}}/>
           <button onClick={setCoordsButtonOnClick} type="submit" className="btn-primary">Построить</button>
-        </div>}
+        </div>
+      }
       <div>
         {coords.map(coord =>
           <div>
-            {inputType === "search" && <input value={coord.address} onChange={(e) => onCoordChange(e, coord)} size={70} type="text"/>}
+            {inputType === "search" && <input value={coord.address} size={70} type="text"/>}
             <span><button className="btn-danger" onClick={() => deleteCoord(coord)}>Удалить</button></span>
           </div>
         )}
