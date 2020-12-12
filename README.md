@@ -46,4 +46,4 @@
  - [Rellik-git](https://github.com/Rellik-git) - алгоритмы, реализованные на C++
  
 ## Live demo
-Посмотреть и попробовать, что у нас получилось можно [тут](https://iitik-hack-map.herokuapp.com/)
+Посмотреть и попробовать, что у нас получилось можно [тут](https://iitik-hack-map.herokuapp.com/).
