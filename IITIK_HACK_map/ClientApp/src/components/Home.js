@@ -153,8 +153,8 @@ export const Home = () => {
       console.log(newRouteCoords);
       
       if (inputType === "coords") {
-        drawRoute(ymaps, way1RouteCoords, setWay1, {pointCoords: way1RouteCoords, points: res.way1.one_chromosome}, 'ffff0000');
-        drawRoute(ymaps, way2RouteCoords, setWay2, {pointCoords: way2RouteCoords, points: res.way2.one_chromosome}, 'ff000000');
+        drawRoute(ymaps, way1RouteCoords, setWay1, {pointCoords: way1RouteCoords, points: res.way1.one_chromosome}, '0000ffff');
+        drawRoute(ymaps, way2RouteCoords, setWay2, {pointCoords: way2RouteCoords, points: res.way2.one_chromosome}, 'ff0000');
       }
       else {
         // рисуем маршрут
