@@ -117,30 +117,29 @@ export const Home = () => {
       }
       console.log(distanceMatrix);
 
-      // запускаем нейронный алгоритм
-      let res = startNeuralAlgorithm(distanceMatrix, n);
-
-      // обновляем массивы координат с изменённым порядком (neural)
+      let res = null;
       let newRouteCoords = [];    // общий маршрут
       let way1RouteCoords = [];
       let way2RouteCoords = [];
-      for (let i = 0; i < n; i++) {
-        newRouteCoords.push(routeCoordsRef.current[res.sol.one_chromosome[i]]);
-      }
-      for (let i = 0; i < res.way1.one_chromosome.length; i++) {
-        way1RouteCoords.push(routeCoordsRef.current[res.way1.one_chromosome[i]]);
-      }
-      for (let i = 0; i < res.way2.one_chromosome.length; i++) {
-        way2RouteCoords.push(routeCoordsRef.current[res.way2.one_chromosome[i]]);
-      }
-      console.log(newRouteCoords);
 
-      if (inputType === "coords") {
-        drawRoute(ymaps, way1RouteCoords, setWay1, {pointCoords: way1RouteCoords, points: res.way1.one_chromosome}, '0000ffff');
-        drawRoute(ymaps, way2RouteCoords, setWay2, {pointCoords: way2RouteCoords, points: res.way2.one_chromosome}, 'ff0000');
-      } else {
-        drawRoute(ymaps, newRouteCoords, setWay1, {pointCoords: newRouteCoords, points: res.sol.one_chromosome}, '0000ffff');
-      }
+      // запускаем нейронный алгоритм
+      if (routeCoordsRef.current.length > 2) {
+        res = startNeuralAlgorithm(distanceMatrix, n);
+
+        // обновляем массивы координат с изменённым порядком (neural)
+        for (let i = 0; i < n; i++)
+          newRouteCoords.push(routeCoordsRef.current[res.sol.one_chromosome[i]]);
+        for (let i = 0; i < res.way1.one_chromosome.length; i++) 
+          way1RouteCoords.push(routeCoordsRef.current[res.way1.one_chromosome[i]]);
+        for (let i = 0; i < res.way2.one_chromosome.length; i++) 
+          way2RouteCoords.push(routeCoordsRef.current[res.way2.one_chromosome[i]]);
+        console.log(res);
+        if (inputType === "coords") {
+          drawRoute(ymaps, way1RouteCoords, setWay1, {pointCoords: way1RouteCoords, points: res.way1.one_chromosome}, '0000ffff');
+          drawRoute(ymaps, way2RouteCoords, setWay2, {pointCoords: way2RouteCoords, points: res.way2.one_chromosome}, 'ff0000');
+        } else drawRoute(ymaps, newRouteCoords, setWay1, {pointCoords: newRouteCoords, points: res.sol.one_chromosome}, '0000ffff');
+      } 
+      else drawRoute(ymaps, routeCoordsRef.current, setWay1, {pointCoords: routeCoordsRef.current, points: [...Array(routeCoordsRef.current.length).keys()]}, '0000ffff');
     }
   }
 
@@ -150,10 +149,13 @@ export const Home = () => {
 
         <Col xl="3">
           <h1>Точки</h1>
-          <AddressesView coords={coords} setCoord={setCoord} routeCoords={routeCoordsRef} inputType={inputType} setInputType={setInputType}/>
-          <div style={{color: "blue"}}>Длина маршрута первого контролёра - {Math.round(way1.length / 1000)} км<br/>Его путевые точки - {way1.points.map((x) => <span>{x} </span>)}</div>
+          <AddressesView coords={coords} setCoord={setCoord} routeCoords={routeCoordsRef} inputType={inputType}
+                         setInputType={setInputType}/>
+          <div style={{color: "blue"}}>Длина маршрута первого контролёра - {Math.round(way1.length / 1000)} км<br/>Его
+            путевые точки - {way1.points.map((x) => <span>{x} </span>)}</div>
           <br/>
-          <div style={{color: "red"}}>Длина маршрута второго контролёра - {Math.round(way2.length / 1000)} км<br/>Его путевые точки - {way2.points.map((x) => <span>{x} </span>)}</div>
+          <div style={{color: "red"}}>Длина маршрута второго контролёра - {Math.round(way2.length / 1000)} км<br/>Его
+            путевые точки - {way2.points.map((x) => <span>{x} </span>)}</div>
         </Col>
 
         <Col>

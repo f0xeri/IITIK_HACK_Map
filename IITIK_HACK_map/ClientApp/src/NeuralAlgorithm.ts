@@ -232,7 +232,7 @@ function startNeuralAlgorithm(matrix: number[][], n: number) {
     }
     D[0][1] = Infinity;
     D[1][0] = Infinity;
-
+    console.log("!")
     // Получение лучшей хромосомы
     let sol: Chromosome = GA(D);
     
