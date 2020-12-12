@@ -57,6 +57,7 @@ export const Home = () => {
   let j = 0;
 
 
+  // неудачная попытка сделать рекурсию, временно оставил (вдруг заработает)
   async function getDistance(ymaps, distanceMatrix, i, j, n) {
     await ymaps.route([routeCoordsRef.current[i], routeCoordsRef.current[j]]).then((route) => {
       distanceMatrix[i][j] = route.getLength();
@@ -81,7 +82,6 @@ export const Home = () => {
       for (let j = i + 1; j < n; j++) {
         await ymaps.route([routeCoordsRef.current[i], routeCoordsRef.current[j]]).then((route) => {
           newArr[j] = route.getLength();
-          //newArr.push(route.getLength())
           console.log(i, j, routeCoordsRef.current[i], routeCoordsRef.current[j], route.getLength());
         });
       }
@@ -96,6 +96,8 @@ export const Home = () => {
     //map.current.geoObjects.removeAll();
 
     let distanceMatrix = await buildDistanceMatrix(ymaps);
+    
+    // доделываем матрицу (симметрия)
     console.log(distanceMatrix);
     for (let i = n - 1; i >= 0; i--) {
       for (let j = i; j >= 0; j--) {
@@ -105,9 +107,11 @@ export const Home = () => {
       }
     }
     console.log(distanceMatrix);
+    // запускаем алгоритм
     let res = AntColonyOptimizationAlgorithm(distanceMatrix, routeCoordsRef.current.length, 0);
     console.log(res);
 
+    // делаем новую матрицу расстояний для повторного прохода алгоритма
     let newDistanceMatrix = [];
     for (let i = 0; i < n; i++) {
       let newArr = [];
@@ -117,14 +121,17 @@ export const Home = () => {
       newDistanceMatrix.push(newArr);
     }
     console.log(newDistanceMatrix);
+    // повторный проход
     res = AntColonyOptimizationAlgorithm(newDistanceMatrix, n, 0);
     console.log(res);
 
+    // обновляем массив координат с изменённым порядком
     let newRouteCoords = [];
     for (let i = 0; i < n; i++) {
       newRouteCoords.push(routeCoordsRef.current[res.tabu[i]]);
     }
     console.log(newRouteCoords);
+    // рисуем маршрут
     map.current.geoObjects.removeAll();
     ymaps.route(routeCoordsRef.current, {
       mapStateAutoApply: true, reverseGeocoding: inputType === "coords"
