@@ -3,7 +3,7 @@ import {YMaps, Map, Placemark} from 'react-yandex-maps';
 import {AddressesView} from "./AddressesView";
 import {Row, Col} from "reactstrap";
 import AntColonyOptimizationAlgorithm from "../AntColonyOptimizationAlgorithm.ts"
-import * as Promice from "q";
+import startNeuralAlgorithm from "../NeuralAlgorithm";
 
 export const Home = () => {
   const [coords, setCoord] = useState([]);
@@ -115,9 +115,12 @@ export const Home = () => {
         }
       }
       console.log(distanceMatrix);
-      // запускаем алгоритм
-      let res = AntColonyOptimizationAlgorithm(distanceMatrix, routeCoordsRef.current.length, 0);
+      
+      let res = startNeuralAlgorithm(distanceMatrix, n);
       console.log(res);
+      // запускаем алгоритм
+      //let res = AntColonyOptimizationAlgorithm(distanceMatrix, routeCoordsRef.current.length, 0);
+      //console.log(res);
 
       /*// делаем новую матрицу расстояний для повторного прохода алгоритма
       let newDistanceMatrix = [];
@@ -133,19 +136,47 @@ export const Home = () => {
       res = AntColonyOptimizationAlgorithm(newDistanceMatrix, n, 0);
       console.log(res);*/
 
-      // обновляем массив координат с изменённым порядком
-      let newRouteCoords = [];
+      // обновляем массив координат с изменённым порядком (ant colony optimization)
+      /*let newRouteCoords = [];
       for (let i = 0; i < n; i++) {
         newRouteCoords.push(routeCoordsRef.current[res.tabu[i]]);
       }
-      console.log(newRouteCoords);
+      console.log(newRouteCoords);*/
 
-      // рисуем маршрут
-      ymaps.route(newRouteCoords, {
+      // обновляем массив координат с изменённым порядком (neural)
+      let newRouteCoords = [];
+      let way1RouteCoords = [];
+      let way2RouteCoords = [];
+      for (let i = 0; i < n; i++) {
+        newRouteCoords.push(routeCoordsRef.current[res.sol.one_chromosome[i]]);
+      }
+      for (let i = 0; i < res.way1.one_chromosome.length; i++) {
+        way1RouteCoords.push(routeCoordsRef.current[res.way1.one_chromosome[i]]);
+      }
+      for (let i = 0; i < res.way2.one_chromosome.length; i++) {
+        way2RouteCoords.push(routeCoordsRef.current[res.way2.one_chromosome[i]]);
+      }
+      console.log(newRouteCoords);
+      
+      // рисуем маршрут 1
+      ymaps.route(way1RouteCoords, {
         mapStateAutoApply: true, reverseGeocoding: inputType === "coords"
       }).then(function (route) {
         route.getPaths().options.set({
           strokeColor: '0000ffff',
+          opacity: 0.9
+        });
+        // добавляем маршрут на карту
+        map.current.geoObjects.add(route);
+        console.log(route.getLength());
+      });
+
+      // рисуем маршрут 2
+      ymaps.route(way2RouteCoords, {
+        mapStateAutoApply: true, reverseGeocoding: inputType === "coords"
+      }).then(function (route) {
+        route.getPaths().options.set({
+          strokeColor: 'ff0000',
           opacity: 0.9
         });
         // добавляем маршрут на карту
