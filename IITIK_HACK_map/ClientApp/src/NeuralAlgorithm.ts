@@ -14,7 +14,7 @@ function create_random_chromosome() : Chromosome {
     for (let i = 0; i < N; ++i) c.one_chromosome[i] = i;
     
     for (let i = N - 1; i > 0; --i) {
-        let randomIndex = Math.floor(Math.random() * (1 - i + 1)) + i;
+        let randomIndex = Math.floor(Math.random() * i) + 1;
         [c.one_chromosome[i], c.one_chromosome[randomIndex]] = [c.one_chromosome[randomIndex], c.one_chromosome[i]];
     }
     return c;
@@ -103,7 +103,7 @@ function cheapest(source: number[][], from: number, c: Chromosome, ind: number) 
     for (let i = 0; i < N; ++i) {
         // Проверка каждого города - есть ли он в маршруте
         break_flag = false;
-        for (let j = 0; j < ind; ++j) {
+        for (let j = 0; j <= ind; ++j) {
             if (c.one_chromosome[j] == i) {
                 break_flag = true;
                 break;
@@ -232,7 +232,7 @@ function startNeuralAlgorithm(matrix: number[][], n: number) {
     }
     D[0][1] = Infinity;
     D[1][0] = Infinity;
-    console.log("!")
+
     // Получение лучшей хромосомы
     let sol: Chromosome = GA(D);
     
