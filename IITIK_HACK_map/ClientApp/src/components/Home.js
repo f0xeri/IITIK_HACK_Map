@@ -42,6 +42,23 @@ export const Home = () => {
     }
   }, [inputType])
 
+  const waysToggleOnChange = e => {
+    if (e.target.value === "way1toggle" && e.target.checked) {
+      simpleDrawRoute(ymaps.current, way1.pointCoords, '0000ffff');
+    }
+    if (e.target.value === "way2toggle" && e.target.checked) {
+      simpleDrawRoute(ymaps.current, way2.pointCoords, 'ff0000');
+    }
+    if (e.target.value === "way1toggle" && !e.target.checked) {
+      map.current.geoObjects.removeAll();
+      simpleDrawRoute(ymaps.current, way2.pointCoords, 'ff0000');
+    }
+    if (e.target.value === "way2toggle" && !e.target.checked) {
+      map.current.geoObjects.removeAll();
+      simpleDrawRoute(ymaps.current, way1.pointCoords, '0000ffff');
+    }
+  }
+  
   /* подсказки пока что ТОЛЬКО по адресу, 
    * с yandex#search не получается получить координаты геокодером
    * route тоже требует именно адрес */
@@ -85,6 +102,20 @@ export const Home = () => {
     return distanceMatrix;
   }
 
+  function simpleDrawRoute(ymaps, coords, color) {
+    ymaps.route(coords, {
+      mapStateAutoApply: true, reverseGeocoding: inputType === "coords"
+    }).then(function (route) {
+      route.getPaths().options.set({
+        strokeColor: color,
+        opacity: 0.9
+      });
+      // добавляем маршрут на карту
+      map.current.geoObjects.add(route);
+      console.log(route.getLength());
+    });
+  }
+  
   function drawRoute(ymaps, coords, setWay, way, color) {
     ymaps.route(coords, {
       mapStateAutoApply: true, reverseGeocoding: inputType === "coords"
@@ -149,13 +180,20 @@ export const Home = () => {
 
         <Col xl="3">
           <h1>Точки</h1>
-          <AddressesView coords={coords} setCoord={setCoord} routeCoords={routeCoordsRef} inputType={inputType}
-                         setInputType={setInputType}/>
-          <div style={{color: "blue"}}>Длина маршрута первого контролёра - {Math.round(way1.length / 1000)} км<br/>Его
-            путевые точки - {way1.points.map((x) => <span>{x} </span>)}</div>
+          <AddressesView coords={coords} setCoord={setCoord} routeCoords={routeCoordsRef} inputType={inputType} setInputType={setInputType}/>
+          <div style={{color: "blue"}}>Длина маршрута первого контролёра - {Math.round(way1.length / 1000)} км<br/>Его путевые точки - {way1.points.map((x) => <span>{x} </span>)}</div>
           <br/>
-          <div style={{color: "red"}}>Длина маршрута второго контролёра - {Math.round(way2.length / 1000)} км<br/>Его
-            путевые точки - {way2.points.map((x) => <span>{x} </span>)}</div>
+          <div style={{color: "red"}}>Длина маршрута второго контролёра - {Math.round(way2.length / 1000)} км<br/>Его путевые точки - {way2.points.map((x) => <span>{x} </span>)}</div>
+          <div onChange={waysToggleOnChange}>
+            <div>
+              <input type="checkbox" defaultChecked value="way1toggle"/>
+              <span> Показать маршрут первого контролёра</span>
+            </div>
+            <div>
+              <input type="checkbox" defaultChecked value="way2toggle"/>
+              <span> Показать маршрут второго контролёра</span>
+            </div>
+          </div>
         </Col>
 
         <Col>
